@@ -1,19 +1,20 @@
 # IEC 61850 MMS Demo
 
-This folder has only two demo flows:
+This folder is portable now.
+You can copy the full `Protocol_Security` folder to `C:`, `D:`, `E:`, USB, or another Windows folder.
+
+Important:
 
 ```text
-Without_TLS = open/readable MMS
-With_TLS    = encrypted TLS traffic
+Move/copy the complete Protocol_Security folder.
+Do not move only one EXE by itself.
+TLS needs the certificate files beside the TLS EXEs.
 ```
-
-Do not run anything from the GitHub source folders for the demo.
-Run only the EXE files inside this folder.
 
 ## Folder
 
 ```text
-D:\Workshop Demo\Protocol_Security
+Protocol_Security
 |-- README.md
 |-- Without_TLS
 |   |-- Server
@@ -39,9 +40,13 @@ D:\Workshop Demo\Protocol_Security
 
 ## 1. Without TLS
 
-Use this first when you want to show readable MMS packets.
+Purpose:
 
-Start Wireshark:
+```text
+Show open/readable MMS packets.
+```
+
+Wireshark:
 
 ```text
 Interface: Adapter for loopback traffic capture
@@ -51,14 +56,26 @@ Filter:    mms
 Run server first:
 
 ```cmd
-cd /d "D:\Workshop Demo\Protocol_Security\Without_TLS\Server"
+cd /d "YOUR_PATH\Protocol_Security\Without_TLS\Server"
 SERVER.exe
 ```
 
 Run client second:
 
 ```cmd
-cd /d "D:\Workshop Demo\Protocol_Security\Without_TLS\Client"
+cd /d "YOUR_PATH\Protocol_Security\Without_TLS\Client"
+CLIENT.exe
+```
+
+Example if copied to `E:\Demo`:
+
+```cmd
+cd /d "E:\Demo\Protocol_Security\Without_TLS\Server"
+SERVER.exe
+```
+
+```cmd
+cd /d "E:\Demo\Protocol_Security\Without_TLS\Client"
 CLIENT.exe
 ```
 
@@ -73,16 +90,22 @@ GetDataValueResponse
 Readable object names like simpleIOGenericIO
 ```
 
-The client keeps running and reading values.
-Stop it with `CTRL+C`.
+Note:
 
-If you still see old `Unconfirmed <RPT>` rows, stop Wireshark capture and start a new capture. The old packets are already saved in the current view.
+```text
+Without_TLS uses port 102 so Wireshark shows MMS directly.
+SERVER.exe can ask for Administrator permission because Windows protects port 102.
+```
 
 ## 2. With TLS
 
-Use this second when you want to show encrypted traffic.
+Purpose:
 
-Start Wireshark:
+```text
+Show encrypted TLS traffic.
+```
+
+Wireshark:
 
 ```text
 Interface: Adapter for loopback traffic capture
@@ -92,14 +115,26 @@ Filter:    tls || tcp.port == 10201
 Run TLS server first:
 
 ```cmd
-cd /d "D:\Workshop Demo\Protocol_Security\With_TLS\Server"
+cd /d "YOUR_PATH\Protocol_Security\With_TLS\Server"
 TLS_SERVER_PORT_10201.exe
 ```
 
 Run TLS client second:
 
 ```cmd
-cd /d "D:\Workshop Demo\Protocol_Security\With_TLS\Client"
+cd /d "YOUR_PATH\Protocol_Security\With_TLS\Client"
+TLS_CLIENT_PORT_10201.exe
+```
+
+Example if copied to `E:\Demo`:
+
+```cmd
+cd /d "E:\Demo\Protocol_Security\With_TLS\Server"
+TLS_SERVER_PORT_10201.exe
+```
+
+```cmd
+cd /d "E:\Demo\Protocol_Security\With_TLS\Client"
 TLS_CLIENT_PORT_10201.exe
 ```
 
@@ -124,18 +159,18 @@ TLS packets are visible, but MMS data is encrypted.
 
 ## New IP For TLS
 
-If you move the demo to another system or change the TLS server IP, regenerate only the TLS certificates:
+If the server IP changes, regenerate only the TLS certificates:
 
 ```cmd
-cd /d "D:\Workshop Demo\Protocol_Security\With_TLS"
+cd /d "YOUR_PATH\Protocol_Security\With_TLS"
 REGENERATE_TLS_CERTS_FOR_NEW_IP.exe
 ```
 
-Then run the TLS server and TLS client again.
+Enter the new server IP.
 
-For another system, the TLS client can run with a server IP:
+For a client on another system:
 
 ```cmd
-cd /d "D:\Workshop Demo\Protocol_Security\With_TLS\Client"
+cd /d "YOUR_PATH\Protocol_Security\With_TLS\Client"
 TLS_CLIENT_PORT_10201.exe SERVER_IP_HERE
 ```
